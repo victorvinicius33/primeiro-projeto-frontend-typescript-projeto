@@ -3,8 +3,14 @@ import Logo from '../../assets/logo.svg';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { FormEvent, useState } from 'react';
+import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
+  const navigate = useNavigate();
+
+  const { handleGetToken, handleAddToken } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,7 +26,10 @@ function SignIn() {
         password
       });
 
-      console.log(response);
+      const { accessToken } = response.data;
+
+      handleAddToken(accessToken);
+      navigate('/main');
     } catch (error) {
       console.log(error);
     }
